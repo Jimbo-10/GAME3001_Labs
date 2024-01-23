@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class StarShip : AgentObject
 {
-    [SerializeField]private float movementSpeed;
-
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float rotationSpeed;
     private Rigidbody2D rb;
+
     // Start is called before the first frame update
     new void Start()
     {
@@ -21,7 +22,8 @@ public class StarShip : AgentObject
     {
         if (TargetPosition != null)
         {
-            Seek();
+            //Seek();
+            SeekForward();
         }
     }
 
@@ -32,9 +34,30 @@ public class StarShip : AgentObject
 
         // Calculate the steering force
         // Check current velocity and only apply for differece between desired velocity and current one
-        Vector2 steeringForce = desiredVelocity - rb.velocity; 
-        
+        Vector2 steeringForce = desiredVelocity - rb.velocity;
+
         // Apply the steering force to the agent
         rb.AddForce(steeringForce);
     }
+
+    private void SeekForward() // Always moves forward while rotate to the target.
+    {
+        // Calculate direction to the target
+        Vector2 directionToTarget = (TargetPosition - transform.position).normalized;
+
+        // Calculate the angle to rotate towards the target
+        float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
+
+        // Smothly rotate towards the target
+        float angleDifference = Mathf.DeltaAngle(targetAngle, transform.eulerAngles.z);
+        float rotationStep = rotationSpeed * Time.deltaTime;
+        float rotationAmount = Mathf.Clamp(angleDifference, -rotationStep, rotationStep);
+
+        transform.Rotate(Vector3.forward, rotationAmount);
+
+        // Move along the forward vector using rigidbody2D
+        rb.velocity = transform.up * movementSpeed;
+    }
+
+
 }
