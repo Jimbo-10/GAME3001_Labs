@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class StarShip : AgentObject
 {
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
     private Rigidbody2D rb;
+
+    private Vector3 initialPosition;
 
     // Start is called before the first frame update
     new void Start()
@@ -15,6 +20,7 @@ public class StarShip : AgentObject
         Debug.Log("Starting StarShip");
 
         rb = GetComponent<Rigidbody2D>();
+        initialPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -25,6 +31,7 @@ public class StarShip : AgentObject
             //Seek();
             SeekForward();
         }
+        Reset();
     }
 
     private void Seek()
@@ -57,6 +64,15 @@ public class StarShip : AgentObject
 
         // Move along the forward vector using rigidbody2D
         rb.velocity = transform.up * movementSpeed;
+    }
+
+    private void Reset()
+    {
+        if (Input.anyKeyDown)
+        {
+            transform.position = initialPosition;
+            SeekForward();
+        }
     }
 
 
