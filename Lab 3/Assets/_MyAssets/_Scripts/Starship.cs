@@ -7,8 +7,11 @@ public class Starship : AgentObject
 {
     [SerializeField] float movementSpeed;
     [SerializeField] float rotationSpeed;
-    // Add fields for whisper length, angle and avoidance weight.
-    //
+
+    // Add fields for whisker length, angle and avoidance weight.
+    [SerializeField] private float whiskerLength;
+    [SerializeField] private float whiskerAngle;
+    [SerializeField] private float avoidanceWeight;
     //
     //
     private Rigidbody2D rb;
@@ -28,26 +31,66 @@ public class Starship : AgentObject
             SeekForward();
             // Add call to AvoidObstacles.
             //
+            AvoidObstacles();
         }
     }
 
     private void AvoidObstacles()
     {
         // Cast whiskers to detect obstacles.
-        //
+        bool hitLeft = CastWiskers(whiskerAngle, Color.red);
+        bool hitRight = CastWiskers(-whiskerAngle, Color.blue);
         //
 
         // Adjust rotation based on detected obstacles.
         //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
+        if (hitLeft)
+        {
+            // rotate clockwise direction
+            RotateClockWise();
+
+        }
+        else if (hitRight && !hitLeft)
+        {
+            // rotate counter clockwise
+            RotateCounterClockWise();
+        }
+    }
+
+    private void RotateClockWise()
+    {
+        // Rotate clockwise based on rotation speed
+        transform.Rotate(Vector3.forward, - rotationSpeed * avoidanceWeight * Time.deltaTime);
+    }
+
+    private void RotateCounterClockWise()
+    {
+        // Rotate clockwise based on rotation speed
+        transform.Rotate(Vector3.forward, rotationSpeed * avoidanceWeight * Time.deltaTime);
+    }
+
+    private bool CastWiskers(float angle, Color color)
+    {
+        bool hitResult = false;
+        Color rayColor = color;
+
+        // Calculate direction of the whiskers
+        Vector2 whiskerDirection = Quaternion.Euler(0, 0, angle) * transform.up;
+
+        // Cast a ray in the whisker direction
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, whiskerDirection,whiskerLength);
+
+        // Check if the ray hits the obstacle
+        if (hit.collider != null)
+        {
+            Debug.Log("Obstacle detected!");
+            rayColor = Color.green;
+            hitResult = true;
+        }
+
+        Debug.DrawRay(transform.position, whiskerDirection * whiskerLength, rayColor);
+
+        return hitResult;
     }
 
     private void RotateCounterClockwise()
