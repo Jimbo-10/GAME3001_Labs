@@ -40,11 +40,13 @@ public class Starship : AgentObject
         // Cast whiskers to detect obstacles.
         bool hitLeft = CastWiskers(whiskerAngle, Color.red);
         bool hitRight = CastWiskers(-whiskerAngle, Color.blue);
+        bool hitleftCorner = CastWiskers(whiskerAngle * 2, Color.magenta);
+        bool hitrightCorner = CastWiskers(-whiskerAngle * 2, Color.cyan);
         //
 
         // Adjust rotation based on detected obstacles.
         //
-        if (hitLeft)
+        if (hitLeft || hitleftCorner)
         {
             // rotate clockwise direction
             RotateClockWise();
@@ -53,6 +55,10 @@ public class Starship : AgentObject
         else if (hitRight && !hitLeft)
         {
             // rotate counter clockwise
+            RotateCounterClockWise();
+        }
+        else if (hitrightCorner && !hitleftCorner)
+        {
             RotateCounterClockWise();
         }
     }
