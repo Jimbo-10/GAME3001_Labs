@@ -50,7 +50,7 @@ public class StarShip : AgentObject
     private void SeekForward() // Always moves forward while rotate to the target.
     {
         // Calculate direction to the target
-        Vector2 directionToTarget = (TargetPosition - transform.position).normalized;
+        Vector2 directionToTarget = (TargetPosition - transform.position ).normalized;
 
         // Calculate the angle to rotate towards the target
         float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;

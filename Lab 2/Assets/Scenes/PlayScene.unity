@@ -530,7 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_target: {fileID: 1190765677}
   movementSpeed: 1
-  rotationSpeed: 7
+  rotationSpeed: 10
 --- !u!61 &812113099
 BoxCollider2D:
   m_ObjectHideFlags: 0
