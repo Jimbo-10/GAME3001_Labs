@@ -24,9 +24,11 @@ public enum NeighbourTile
 public class GridManager : MonoBehaviour
 {
     // Fill in for Lab 4 Part 1.
-    //
-    //
-    //
+    [SerializeField]private GameObject tilePrefab;
+    [SerializeField] private Color[] colors;
+    private GameObject[,] grid;
+    private int rows = 12;
+    private int columns = 16;
 
     public static GridManager Instance { get; private set; } // Static object of the class.
 
@@ -46,33 +48,74 @@ public class GridManager : MonoBehaviour
     private void Initialize()
     {
         // Fill in for Lab 4 Part 1.
-        //
-        //
-        //
+        BuildGrid();
+        ConnectGrid();
     }
 
     void Update()
     {
         // Fill in for Lab 4 Part 1.
-        //
-        //
-        //
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            foreach(Transform child in transform)
+            {
+                child.gameObject.SetActive(!child.gameObject.activeSelf);
+            }
+        }
     }
 
     private void BuildGrid()
     {
         // Fill in for Lab 4 Part 1.
-        //
-        //
-        //
+        grid = new GameObject[rows, columns];
+        int count = 0;
+        float rowPos = 5.5f;
+
+        for(int row = 0; row < rows; row++, rowPos--)
+        {
+            float colPos = -7.5f;
+            for(int col = 0; col < columns; col++, colPos++)
+            {
+                GameObject tileInst = GameObject.Instantiate(tilePrefab, new Vector3(colPos, rowPos, 0.0f), Quaternion.identity);
+                tileInst.GetComponent<TileScript>().SetColor(colors[System.Convert.ToInt32(count++ % 2 == 0)]);
+
+                tileInst.transform.parent = transform;
+                grid[row, col] = tileInst;
+            }
+            count--;
+        }
     }
 
     private void ConnectGrid()
     {
         // Fill in for Lab 4 Part 1.
-        //
-        //
-        //
+        for(int row = 0; row < rows; row++)
+        {
+            for(int column = 0; column < columns; column++)
+            {
+                TileScript tileScript = grid[row,column]. GetComponent<TileScript>();
+
+                if(row > 0) // Set top neighbour if tile is not in the top row
+                {
+                    tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, column]);
+                }
+
+                if (column < columns -1) // Set top neighbour if tile is not in the top row
+                {
+                    tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, column + 1]);
+                }
+
+                if (row < row - 1) // Set top neighbour if tile is not in the top row
+                {
+                    tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, column]);
+                }
+
+                if (column > 0) // Set top neighbour if tile is not in the top row
+                {
+                    tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, column - 1]);
+                }
+            }
+        }
     }
 
     public GameObject[,] GetGrid()
