@@ -24,11 +24,14 @@ public enum NeighbourTile
 public class GridManager : MonoBehaviour
 {
     // Fill in for Lab 4 Part 1.
-    [SerializeField]private GameObject tilePrefab;
+    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private GameObject minePrefab;
     [SerializeField] private Color[] colors;
     private GameObject[,] grid;
     private int rows = 12;
     private int columns = 16;
+
+    private List<GameObject> mines = new List<GameObject>();
 
     public static GridManager Instance { get; private set; } // Static object of the class.
 
@@ -62,6 +65,26 @@ public class GridManager : MonoBehaviour
                 child.gameObject.SetActive(!child.gameObject.activeSelf);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Vector2 gridPosition = GetGridPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            GameObject mineInst = GameObject.Instantiate(minePrefab, new Vector3(gridPosition.x, gridPosition.y, 0.0f), Quaternion.identity);
+            Vector2 mineIndex = mineInst.GetComponent<NavigationObject>().GetGridIndex();
+            grid[(int)mineIndex.x, (int)mineIndex.y].GetComponent<TileScript>().ToggleImpassable(true);
+
+            mines.Add(mineInst);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            foreach(GameObject mine in mines)
+            {
+                Destroy(mine);
+            }
+            mines.Clear();
+        }
+        
     }
 
     private void BuildGrid()
@@ -123,7 +146,7 @@ public class GridManager : MonoBehaviour
         // Fix for Lab 4 Part 1.
         //
         // return grid;
-        return null;
+        return grid;
     }
 
     // The following utility function creates the snapping to the center of a tile.

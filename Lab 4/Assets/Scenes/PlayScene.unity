@@ -245,6 +245,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 4813588358410622281, guid: 8afe5d5c721b9924291ee8ee98c0f9f9, type: 3}
+  minePrefab: {fileID: 6537141037928142162, guid: 3aae427a40059ed4aab13ca36c2d691b, type: 3}
+  colors:
+  - {r: 0.95703095, g: 0.98490566, b: 0.95848954, a: 0.5529412}
+  - {r: 0.15902297, g: 0.1418939, b: 0.82641506, a: 0.5921569}
 --- !u!4 &571498480
 Transform:
   m_ObjectHideFlags: 0
@@ -452,6 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24466755be092284eb36e3a389ab79e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridIndex: {x: 0, y: 0}
 --- !u!1 &1826504611
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,6 +743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24466755be092284eb36e3a389ab79e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridIndex: {x: 0, y: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

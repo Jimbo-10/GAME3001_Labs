@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,18 +28,22 @@ public class ClickDragScript : MonoBehaviour
                     currentlyDraggedObject = rb2d;
                     offset = rb2d.transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     // Add extra behaviour for mines in Lab 4 part 1.
-                    //
-                    //
-                    //
+                    if(currentlyDraggedObject.gameObject.tag == "Mines")
+                    {
+                        Vector2 mineIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
+                        GridManager.Instance.GetGrid()[(int)mineIndex.y, (int)mineIndex.x].GetComponent<TileScript>().ToggleImpassable();
+                    }
                 }
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
             // Add extra behaviour for mines in Lab 4 part 1.
-            //
-            //
-            //
+            if (currentlyDraggedObject.gameObject.tag == "Mines")
+            {
+                Vector2 mineIndex = currentlyDraggedObject.gameObject.GetComponent<NavigationObject>().GetGridIndex();
+                GridManager.Instance.GetGrid()[(int)mineIndex.y, (int)mineIndex.x].GetComponent<TileScript>().ToggleImpassable(true);
+            }
             // Stop dragging.
             isDragging = false;
             currentlyDraggedObject = null;
@@ -55,13 +60,13 @@ public class ClickDragScript : MonoBehaviour
             {
                 // Move the dragged GameObject and lock it to a grid position.
                 // Add extra behaviour for lock to grid in Lab 4 part 1.
-                //
-                //
-                //
+                Vector2 gridPosition = GridManager.Instance.GetGridPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                currentlyDraggedObject.MovePosition(gridPosition);
+                
             }
             // Uncomment the below line for Lab 4 part 1.
             //
-            // currentlyDraggedObject.GetComponent<NavigationObject>().SetGridIndex();
+             currentlyDraggedObject.GetComponent<NavigationObject>().SetGridIndex();
         }
     }
 }
