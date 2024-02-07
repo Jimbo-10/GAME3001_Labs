@@ -9,11 +9,13 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip m_Clip;
     // Start is called before the first frame update
 
-    void Awake()
+    void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+
         m_AudioSource.clip = m_Clip;
         m_AudioSource.Play();
+
+        DontDestroyOnLoad(gameObject);
     }
    
 }
