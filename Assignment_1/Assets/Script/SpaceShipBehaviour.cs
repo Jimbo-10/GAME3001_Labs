@@ -10,8 +10,9 @@ public class SpaceShipBehaviour : MonoBehaviour
    // [SerializeField] EnemyBehavoiur _enemyBehaviour;
     [SerializeField] GameObject enemy;
     [SerializeField] GameObject spaceShip;
+    [SerializeField] GameObject obstacle;
     private GameObject spawnedEnemy;
-    private GameObject spawnedSpaceShip;
+    private GameObject spawnedObstacle;
     private float slowingDistance = 2.2f;
    
     [SerializeField] float rotationSpeed;
@@ -28,6 +29,7 @@ public class SpaceShipBehaviour : MonoBehaviour
 
     void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
 
@@ -35,7 +37,6 @@ public class SpaceShipBehaviour : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            // spawnedSpaceShip = Instantiate(spaceShip, new Vector3(-0.83f, -0.74f, 0f), Quaternion.identity);
             spaceShip.transform.position = new Vector3(-0.83f, -0.74f, 0f);
             spawnedEnemy = Instantiate(enemy, new Vector3(0.83f, 0.73f, 0f), Quaternion.identity);
 
@@ -46,9 +47,22 @@ public class SpaceShipBehaviour : MonoBehaviour
             spawnedEnemy = Instantiate(enemy, new Vector3(5.52f, 2.49f, 0f), Quaternion.identity);
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            spawnedEnemy = Instantiate(enemy, new Vector3(5.52f, 2.49f, 0f), Quaternion.identity);
+            spawnedObstacle = Instantiate(obstacle, new Vector3(-0.73f, -0.27f, 0f), Quaternion.identity);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Reset();
+        }
+
         if (Input.GetKey(KeyCode.Alpha1))
         {
             Seek();
+            AvoidObstacles();
         }
 
         if (Input.GetKey(KeyCode.Alpha2))
@@ -60,8 +74,70 @@ public class SpaceShipBehaviour : MonoBehaviour
         {
             Arrival();
         }
+
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            Seek();
+            AvoidObstacles();
+        }
     }
 
+    private void AvoidObstacles()
+    {
+
+        bool hitLeft = CastWiskers(whiskerAngle, Color.red);
+        bool hitRight = CastWiskers(-whiskerAngle, Color.blue);
+        bool hitleftCorner = CastWiskers(whiskerAngle * 2, Color.magenta);
+        bool hitrightCorner = CastWiskers(-whiskerAngle * 2, Color.cyan);
+
+        if (hitLeft || hitleftCorner)
+        {
+            RotateClockWise();
+        }
+
+        else if (hitRight && !hitLeft)
+        {
+            RotateCounterClockWise();
+        }
+
+        else if (hitrightCorner && !hitleftCorner)
+        {
+            RotateCounterClockWise();
+        }
+    }
+
+    private void RotateClockWise()
+    {
+        transform.Rotate(Vector3.forward, -rotationSpeed * avoidanceWeight * Time.deltaTime);
+    }
+
+    private void RotateCounterClockWise()
+    {
+        transform.Rotate(Vector3.forward, rotationSpeed * avoidanceWeight * Time.deltaTime);
+    }
+    private bool CastWiskers(float angle, Color color)
+    {
+        bool hitResult = false;
+        Color rayColor = color;
+
+
+        Vector2 whiskerDirection = Quaternion.Euler(0, 0, angle) * transform.up;
+
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, whiskerDirection, whiskerLength);
+
+
+        if (hit.collider != null)
+        {
+            Debug.Log("Obstacle detected!");
+            rayColor = Color.green;
+            hitResult = true;
+        }
+
+        Debug.DrawRay(transform.position, whiskerDirection * whiskerLength, rayColor);
+
+        return hitResult;
+    }
     public void Seek()
     {
             Vector2 directionToTarget = (spawnedEnemy.transform.position - transform.position).normalized;
@@ -110,60 +186,10 @@ public class SpaceShipBehaviour : MonoBehaviour
             rigidBody.velocity = transform.up * desiredVelocity;
     }
 
-    //private void AvoidObstacles()
-    //{
-
-    //    bool hitLeft = CastWiskers(whiskerAngle, Color.red);
-    //    bool hitRight = CastWiskers(-whiskerAngle, Color.blue);
-    //    bool hitleftCorner = CastWiskers(whiskerAngle * 2, Color.magenta);
-    //    bool hitrightCorner = CastWiskers(-whiskerAngle * 2, Color.cyan);
-
-    //    if (hitLeft || hitleftCorner)
-    //    {
-    //        RotateClockWise();
-    //    }
-
-    //    else if (hitRight && !hitLeft)
-    //    {
-    //        RotateCounterClockWise();
-    //    }
-
-    //    else if (hitrightCorner && !hitleftCorner)
-    //    {
-    //        RotateCounterClockWise();
-    //    }
-    //}
-
-    //private void RotateClockWise()
-    //{
-    //    transform.Rotate(Vector3.forward, -rotationSpeed * avoidanceWeight * Time.deltaTime);
-    //}
-
-    //private void RotateCounterClockWise()
-    //{
-    //    transform.Rotate(Vector3.forward, rotationSpeed * avoidanceWeight * Time.deltaTime);
-    //}
-    //private bool CastWiskers(float angle, Color color)
-    //{
-    //    bool hitResult = false;
-    //    Color rayColor = color;
-
-
-    //    Vector2 whiskerDirection = Quaternion.Euler(0, 0, angle) * transform.up;
-
-
-    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, whiskerDirection, whiskerLength);
-
-
-    //    if (hit.collider != null)
-    //    {
-    //        Debug.Log("Obstacle detected!");
-    //        rayColor = Color.green;
-    //        hitResult = true;
-    //    }
-
-    //    Debug.DrawRay(transform.position, whiskerDirection * whiskerLength, rayColor);
-
-    //    return hitResult;
-    //}
+    private void Reset()
+    {
+        Destroy(gameObject);
+        Destroy(enemy);
+        Destroy(obstacle);
+    }
 }
