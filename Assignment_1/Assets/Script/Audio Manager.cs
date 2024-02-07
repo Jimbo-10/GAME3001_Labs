@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
 
-    [SerializeField] private AudioSource m_AudioSource;
     [SerializeField] private AudioClip m_Clip;
+    AudioSource m_audioSource;
     // Start is called before the first frame update
 
     void Start()
     {
+        m_audioSource = GetComponent<AudioSource>();
 
-        m_AudioSource.clip = m_Clip;
-        m_AudioSource.Play();
+        m_audioSource.clip = m_Clip;
+        m_audioSource.Play();
 
-        DontDestroyOnLoad(gameObject);
-    }
-   
+        DontDestroyOnLoad(this.gameObject);
+    }   
 }
