@@ -12,29 +12,18 @@ public class SpaceShipBehaviour : MonoBehaviour
     [SerializeField] GameObject spaceShip;
     private GameObject spawnedEnemy;
     private GameObject spawnedSpaceShip;
-   // [SerializeField] Transform targetEnemy;
+    private float slowingDistance = 2.2f;
+   
     [SerializeField] float rotationSpeed;
     [SerializeField] float speed;
-
-    //private Vector3 targetPosition;
-
-    //[SerializeField] private float whiskerLength;
-    //[SerializeField] private float whiskerAngle;
-    //[SerializeField] private float avoidanceWeight;
+    [SerializeField] private float whiskerLength;
+    [SerializeField] private float whiskerAngle;
+    [SerializeField] private float avoidanceWeight;
 
     Rigidbody2D rigidBody;
-    // Start is called before the first frame update
-    //public Vector3 TargetPosition
-    //{
-    //    get { return targetEnemy.position; }
-    //    set { targetEnemy.position = value; }
-    //}
     void Start()
     {
-        
-        rigidBody = GetComponent<Rigidbody2D>();
-        //TargetPosition = targetEnemy.position;
-        
+        rigidBody = GetComponent<Rigidbody2D>();   
     }
 
     void Update()
@@ -51,6 +40,11 @@ public class SpaceShipBehaviour : MonoBehaviour
             spawnedEnemy = Instantiate(enemy, new Vector3(0.83f, 0.73f, 0f), Quaternion.identity);
 
         }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+
+            spawnedEnemy = Instantiate(enemy, new Vector3(5.52f, 2.49f, 0f), Quaternion.identity);
+        }
 
         if (Input.GetKey(KeyCode.Alpha1))
         {
@@ -62,27 +56,22 @@ public class SpaceShipBehaviour : MonoBehaviour
             Flee();
         }
 
-
+        if (Input.GetKey(KeyCode.Alpha3))
+        {
+            Arrival();
+        }
     }
 
     public void Seek()
     {
-        
-            // Calculate direction to the target.
             Vector2 directionToTarget = (spawnedEnemy.transform.position - transform.position).normalized;
-
-            // Calculate the angle to rotate towards the target.
-            float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg + 90.0f; // Note the +90 when converting from Radians.
-
-            // Smoothly rotate towards the target.
+            float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg + 90.0f; 
             float angleDifference = Mathf.DeltaAngle(targetAngle, transform.eulerAngles.z);
             float rotationStep = rotationSpeed * Time.deltaTime;
             float rotationAmount = Mathf.Clamp(angleDifference, -rotationStep, rotationStep);
             transform.Rotate(Vector3.forward, rotationAmount);
 
-            // Move along the forward vector using Rigidbody2D.
-            rigidBody.velocity = transform.up * speed;
-       
+            rigidBody.velocity = transform.up * speed;   
     }
 
     public void Flee()
@@ -93,9 +82,32 @@ public class SpaceShipBehaviour : MonoBehaviour
         float angleDifference = Mathf.DeltaAngle(angleOfTarget, transform.eulerAngles.z);
         float rotationStep = rotationSpeed * Time.deltaTime;
         float rotationAmount = Mathf.Clamp(angleDifference, -rotationStep, rotationStep);
-       transform.Rotate(Vector3.forward, rotationAmount);
+        transform.Rotate(Vector3.forward, rotationAmount);
 
         rigidBody.velocity = transform.up * speed;
+    }
+
+    public void Arrival()
+    {
+       
+        Vector2 directionToTarget = (spawnedEnemy.transform.position - transform.position).normalized;
+        float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg + 90.0f;
+        float angleDifference = Mathf.DeltaAngle(targetAngle, transform.eulerAngles.z);
+        float rotationStep = rotationSpeed * Time.deltaTime;
+        float rotationAmount = Mathf.Clamp(angleDifference, -rotationStep, rotationStep);
+        transform.Rotate(Vector3.forward, rotationAmount);
+
+        
+        float distance = Vector2.Distance(transform.position, spawnedEnemy.transform.position);
+        Vector2 desiredVelocity;
+        if (distance < slowingDistance)
+        {
+            desiredVelocity = directionToTarget * speed * (distance/slowingDistance);
+            rigidBody.velocity = transform.up * desiredVelocity;
+        }
+        else
+            desiredVelocity = directionToTarget * speed;
+            rigidBody.velocity = transform.up * desiredVelocity;
     }
 
     //private void AvoidObstacles()
@@ -105,7 +117,7 @@ public class SpaceShipBehaviour : MonoBehaviour
     //    bool hitRight = CastWiskers(-whiskerAngle, Color.blue);
     //    bool hitleftCorner = CastWiskers(whiskerAngle * 2, Color.magenta);
     //    bool hitrightCorner = CastWiskers(-whiskerAngle * 2, Color.cyan);
-       
+
     //    if (hitLeft || hitleftCorner)
     //    {
     //        RotateClockWise();
@@ -136,13 +148,13 @@ public class SpaceShipBehaviour : MonoBehaviour
     //    bool hitResult = false;
     //    Color rayColor = color;
 
-        
+
     //    Vector2 whiskerDirection = Quaternion.Euler(0, 0, angle) * transform.up;
 
-        
+
     //    RaycastHit2D hit = Physics2D.Raycast(transform.position, whiskerDirection, whiskerLength);
 
-        
+
     //    if (hit.collider != null)
     //    {
     //        Debug.Log("Obstacle detected!");
