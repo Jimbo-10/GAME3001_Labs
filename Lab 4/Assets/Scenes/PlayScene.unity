@@ -245,10 +245,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 4813588358410622281, guid: 8afe5d5c721b9924291ee8ee98c0f9f9, type: 3}
+  tilePanelPrefab: {fileID: 5051579433051520718, guid: f2d9ed86f1cf58c47bc37513a0a269b7, type: 3}
+  panelParent: {fileID: 1033789158}
   minePrefab: {fileID: 6537141037928142162, guid: 3aae427a40059ed4aab13ca36c2d691b, type: 3}
   colors:
   - {r: 0.95703095, g: 0.98490566, b: 0.95848954, a: 0.5529412}
   - {r: 0.15902297, g: 0.1418939, b: 0.82641506, a: 0.5921569}
+  useManhattanHeuristic: 1
+  baseTileCost: 0
 --- !u!4 &571498480
 Transform:
   m_ObjectHideFlags: 0
@@ -410,8 +414,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 600459654}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 32, y: -32}
   m_SizeDelta: {x: 1024, y: 768}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -697,6 +701,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Planet
       objectReference: {fileID: 0}
+    - target: {fileID: 7429664672012497294, guid: 27e9559a357116b47afd7409e759ebe7, type: 3}
+      propertyPath: m_TagString
+      value: Planet
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -757,29 +765,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4350412689263730352, guid: f365dd11c3c60e948847b62a3097a15b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8968010714796815058}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f365dd11c3c60e948847b62a3097a15b, type: 3}
---- !u!1 &8968010714796815057 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4350412689263730352, guid: f365dd11c3c60e948847b62a3097a15b, type: 3}
-  m_PrefabInstance: {fileID: 8968010714796815056}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8968010714796815058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8968010714796815057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24466755be092284eb36e3a389ab79e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridIndex: {x: 0, y: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
