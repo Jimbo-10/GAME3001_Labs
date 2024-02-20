@@ -100,7 +100,7 @@ public class GridManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-
+                SetTileStatuses();
             }
         }
     }
@@ -127,6 +127,8 @@ public class GridManager : MonoBehaviour
                 panelTransform.localScale = Vector3.one;
                 panelTransform.anchoredPosition = new Vector3(64f * col, -64f * row);
                 tileScript.tilePanel = panelInst.GetComponent<TilePanelScript>();
+                // create a new PathNode for the new tile
+                tileScript.Node = new PathNode(tileInst);
             }
             count--;
         }
@@ -148,21 +150,48 @@ public class GridManager : MonoBehaviour
             for (int col = 0; col < columns; col++)
             {
                 TileScript tileScript = grid[row, col].GetComponent<TileScript>();
+                tileScript.ResetNeighbourConnections();
+
+                if (tileScript.status == TileStatus.IMPASSABLE) continue;
+
                 if (row > 0) // Set top neighbour if tile is not in top row.
                 {
-                    tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, col]);
+                    if (!(grid[row -1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE)){
+                        tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, col]);
+                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row - 1, col].GetComponent<TileScript>().Node,
+                            Vector3.Distance(tileScript.transform.position, grid[row - 1, col].transform.position)));
+                    }
+                    
                 }
                 if (col < columns - 1) // Set right neighbour if tile is not in rightmost row.
                 {
-                    tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col + 1]);
+                    if (!(grid[row, col + 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+                    {
+                        tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col + 1]);
+                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col + 1].GetComponent<TileScript>().Node,
+                            Vector3.Distance(tileScript.transform.position, grid[row, col + 1].transform.position)));
+                    }
+                    
                 }
                 if (row < rows - 1) // Set bottom neighbour if tile is not in bottom row.
                 {
-                    tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, col]);
+                    if (!(grid[row, col + 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+                    {
+                        tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, col]);
+                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row + 1, col].GetComponent<TileScript>().Node,
+                            Vector3.Distance(tileScript.transform.position, grid[row + 1, col].transform.position)));
+                    }
+                    
                 }
                 if (col > 0) // Set left neighbour if tile is not in leftmost row.
                 {
-                    tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, col - 1]);
+                    if (!(grid[row, col + 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+                    {
+                        tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, col - 1]);
+                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col - 1].GetComponent<TileScript>().Node,
+                            Vector3.Distance(tileScript.transform.position, grid[row, col - 1].transform.position)));
+                    }
+                    
                 }
             }
         }
@@ -207,5 +236,26 @@ public class GridManager : MonoBehaviour
                 tileScript.tilePanel.costText.text = tileScript.cost.ToString("F1");
             }
         }
+    }
+    public void SetTileStatuses()
+    {
+        foreach(GameObject go in grid)
+        {
+            go.GetComponent<TileScript>().SetStatus(TileStatus.UNVISITED);
+        }
+
+        foreach(GameObject mine in mines)
+        {
+            Vector2 mineIndex = mine.GetComponent<NavigationObject>().GetGridIndex();
+            grid[(int)mineIndex.y, (int)mineIndex.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
+        }
+
+        GameObject ship = GameObject.FindGameObjectWithTag("ship");
+        Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
+        grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
+
+        GameObject planet = GameObject.FindGameObjectWithTag("planet");
+        Vector2 planetIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
+        grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
     }
 }
