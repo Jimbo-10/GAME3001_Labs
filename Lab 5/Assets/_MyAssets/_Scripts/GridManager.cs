@@ -252,10 +252,10 @@ public class GridManager : MonoBehaviour
 
         GameObject ship = GameObject.FindGameObjectWithTag("ship");
         Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
-        grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
+        grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.START);
 
         GameObject planet = GameObject.FindGameObjectWithTag("planet");
         Vector2 planetIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
-        grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.IMPASSABLE);
+        grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().SetStatus(TileStatus.GOAL);
     }
 }
