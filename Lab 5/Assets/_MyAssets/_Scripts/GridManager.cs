@@ -9,7 +9,8 @@ public enum TileStatus
     CLOSED,
     IMPASSABLE,
     GOAL,
-    START
+    START,
+    PATH
 };
 
 public enum NeighbourTile
@@ -82,6 +83,25 @@ public class GridManager : MonoBehaviour
                 Destroy(mine);
             }
             mines.Clear();
+        }
+
+        if (Input.GetKeyDown(KeyCode.F)) // Start pathfinding
+        {
+            //Get ship node
+            GameObject ship = GameObject.FindGameObjectWithTag("Ship");
+            Vector2 shipIndices = ship.GetComponent<NavigationObject>().GetGridIndex();
+            PathNode start = grid[(int)shipIndices.y, (int)shipIndices.x].GetComponent<TileScript>().Node;
+
+            GameObject planet = GameObject.FindGameObjectWithTag("planet");
+            Vector2 planetIndices = planet.GetComponent<NavigationObject>().GetGridIndex();
+            PathNode goal = grid[(int)planetIndices.y, (int)planetIndices.x].GetComponent<TileScript>().Node;
+
+            PathManager.Instance.GetShortestPath(start, goal);
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+
+            }
         }
     }
 
