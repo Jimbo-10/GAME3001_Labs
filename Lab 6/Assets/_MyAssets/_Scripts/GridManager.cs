@@ -156,54 +156,54 @@ public class GridManager : MonoBehaviour
     }
 
     // TODO: Comment out for Lab 6a. We don't need to connect grid for Lab 6.
-    public void ConnectGrid() // TODO: Made public for Lab 5. Also lots of changes within.
-    {
-        for (int row = 0; row < rows; row++)
-        {
-            for (int col = 0; col < columns; col++)
-            {
-                TileScript tileScript = grid[row, col].GetComponent<TileScript>();
-                tileScript.ResetNeighbourConnections(); // TODO: New for Lab 5.
-                if (tileScript.status == TileStatus.IMPASSABLE) continue;
-                if (row > 0) // Set top neighbour if tile is not in top row.
-                {
-                    if (!(grid[row - 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, col]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row - 1, col].GetComponent<TileScript>().Node,
-                            Vector3.Distance(tileScript.transform.position, grid[row - 1, col].transform.position)));
-                    }
-                }
-                if (col < columns - 1) // Set right neighbour if tile is not in rightmost row.
-                {
-                    if (!(grid[row, col + 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col + 1]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col + 1].GetComponent<TileScript>().Node,
-                            Vector3.Distance(tileScript.transform.position, grid[row, col + 1].transform.position)));
-                    }
-                }
-                if (row < rows - 1) // Set bottom neighbour if tile is not in bottom row.
-                {
-                    if (!(grid[row + 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, col]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row + 1, col].GetComponent<TileScript>().Node,
-                             Vector3.Distance(tileScript.transform.position, grid[row + 1, col].transform.position)));
-                    }
-                }
-                if (col > 0) // Set left neighbour if tile is not in leftmost row.
-                {
-                    if (!(grid[row, col - 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
-                    {
-                        tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, col - 1]);
-                        tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col - 1].GetComponent<TileScript>().Node,
-                            Vector3.Distance(tileScript.transform.position, grid[row, col - 1].transform.position)));
-                    }
-                }
-            }
-        }
-    }
+    //public void ConnectGrid() // TODO: Made public for Lab 5. Also lots of changes within.
+    //{
+    //    for (int row = 0; row < rows; row++)
+    //    {
+    //        for (int col = 0; col < columns; col++)
+    //        {
+    //            TileScript tileScript = grid[row, col].GetComponent<TileScript>();
+    //            tileScript.ResetNeighbourConnections(); // TODO: New for Lab 5.
+    //            if (tileScript.status == TileStatus.IMPASSABLE) continue;
+    //            if (row > 0) // Set top neighbour if tile is not in top row.
+    //            {
+    //                if (!(grid[row - 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.TOP_TILE, grid[row - 1, col]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row - 1, col].GetComponent<TileScript>().Node,
+    //                        Vector3.Distance(tileScript.transform.position, grid[row - 1, col].transform.position)));
+    //                }
+    //            }
+    //            if (col < columns - 1) // Set right neighbour if tile is not in rightmost row.
+    //            {
+    //                if (!(grid[row, col + 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.RIGHT_TILE, grid[row, col + 1]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col + 1].GetComponent<TileScript>().Node,
+    //                        Vector3.Distance(tileScript.transform.position, grid[row, col + 1].transform.position)));
+    //                }
+    //            }
+    //            if (row < rows - 1) // Set bottom neighbour if tile is not in bottom row.
+    //            {
+    //                if (!(grid[row + 1, col].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.BOTTOM_TILE, grid[row + 1, col]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row + 1, col].GetComponent<TileScript>().Node,
+    //                         Vector3.Distance(tileScript.transform.position, grid[row + 1, col].transform.position)));
+    //                }
+    //            }
+    //            if (col > 0) // Set left neighbour if tile is not in leftmost row.
+    //            {
+    //                if (!(grid[row, col - 1].GetComponent<TileScript>().status == TileStatus.IMPASSABLE))
+    //                {
+    //                    tileScript.SetNeighbourTile((int)NeighbourTile.LEFT_TILE, grid[row, col - 1]);
+    //                    tileScript.Node.AddConnection(new PathConnection(tileScript.Node, grid[row, col - 1].GetComponent<TileScript>().Node,
+    //                        Vector3.Distance(tileScript.transform.position, grid[row, col - 1].transform.position)));
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
     // Comment out to here.
 
     public GameObject[,] GetGrid()
