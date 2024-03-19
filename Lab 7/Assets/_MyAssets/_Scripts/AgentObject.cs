@@ -5,7 +5,11 @@ using UnityEngine;
 // TODO: Add for Lab 7a.
 public enum ActionState
 {
-    
+    NO_ACTION = -1,
+    ATTACK,
+    MOVE_TO_LOS,
+    MOVE_TO_PLAYER,
+    PATROL
 };
 
 public class AgentObject : MonoBehaviour

@@ -9,7 +9,7 @@ public enum TreeNodeType
 };
 
 public abstract class TreeNode
-{
+{ 
     public string name;
     public TreeNode left = null;
     public TreeNode right = null;
