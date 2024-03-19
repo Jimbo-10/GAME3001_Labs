@@ -17,6 +17,7 @@ public class PatrolAction : ActionNode
             Debug.Log("Starting " + name);
             Starship ss = Agent.GetComponent<Starship>();
             ss.state = ActionState.PATROL;
+            ss.StartPatrol();
         }
 
         Debug.Log("Performing " + name);

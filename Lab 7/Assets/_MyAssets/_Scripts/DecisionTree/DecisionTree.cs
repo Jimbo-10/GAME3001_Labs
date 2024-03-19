@@ -39,7 +39,7 @@ public class DecisionTree
             case TreeNodeType.LEFT_TREE_NODE:
                 parent.left = child;
                 break;
-                case TreeNodeType.RIGHT_TREE_NODE:
+            case TreeNodeType.RIGHT_TREE_NODE:
                 parent.right = child;
                 break;
         }

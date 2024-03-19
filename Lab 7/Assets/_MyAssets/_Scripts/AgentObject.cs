@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO: Add for Lab 7a.
+[System.Serializable]
 public enum ActionState
 {
     NO_ACTION = -1,
@@ -28,8 +29,10 @@ public class AgentObject : MonoBehaviour
     {
         Debug.Log("Starting Agent.");
         // TODO: Modify for Lab 7a.
-        //
-        //
-        //
+        if(m_target != null)
+        {
+            TargetPosition = m_target.position;
+        }
+        state = ActionState.NO_ACTION;
     }
 }
