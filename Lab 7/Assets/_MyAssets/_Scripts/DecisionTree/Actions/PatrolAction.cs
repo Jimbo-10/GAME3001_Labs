@@ -12,12 +12,21 @@ public class PatrolAction : ActionNode
 
     public override void Action()
     {
-        if (Agent.GetComponent<Starship>().state != ActionState.PATROL)
+        if (Agent.GetComponent<AgentObject>().state != ActionState.PATROL)
         {
             Debug.Log("Starting " + name);
-            Starship ss = Agent.GetComponent<Starship>();
-            ss.state = ActionState.PATROL;
-            ss.StartPatrol();
+            AgentObject ao = Agent.GetComponent<AgentObject>();
+            ao.state = ActionState.PATROL;
+           
+
+            if(AgentScript is CloseCombatEnemy cce)
+            {
+                cce.StartPatrol();
+            }
+            else if(AgentScript is RangeCombatEnemy rce)
+            {
+                rce.StartPatrol();
+            }
         }
 
         Debug.Log("Performing " + name);

@@ -10,7 +10,9 @@ public enum ActionState
     ATTACK,
     MOVE_TO_LOS,
     MOVE_TO_PLAYER,
-    PATROL
+    PATROL,
+    MOVE_TO_RANGE,
+    FLEE
 };
 
 public class AgentObject : MonoBehaviour

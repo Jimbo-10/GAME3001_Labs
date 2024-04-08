@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Starship : AgentObject
+public class CloseCombatEnemy : AgentObject
 {
     // TODO: Add for Lab 7a.
     [SerializeField] Transform[] patrolPoints;
@@ -24,7 +24,7 @@ public class Starship : AgentObject
     new void Start() // Note the new.
     {
         base.Start(); // Explicitly invoking Start of AgentObject.
-        Debug.Log("Starting Starship.");
+        Debug.Log("Starting CloseCombatEnemy.");
         rb = GetComponent<Rigidbody2D>();
         no = GetComponent<NavigationObject>();
         // TODO: Add for Lab 7a.
@@ -174,7 +174,7 @@ public class Starship : AgentObject
 
         // PatrolAction leaf.
         TreeNode patrolNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)patrolNode).Agent = this.gameObject;
+        ((ActionNode)patrolNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy);
         dt.treeNodeList.Add(patrolNode);
 
 
@@ -186,7 +186,7 @@ public class Starship : AgentObject
 
         // MoveToLOSAction leaf.
         TreeNode moveToLOSNode = dt.AddNode(dt.LOSNode, new MoveToLOSAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)moveToLOSNode).Agent = this.gameObject;
+        ((ActionNode)moveToLOSNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add((moveToLOSNode));
 
         // CloseCombatCondition node.
@@ -197,12 +197,12 @@ public class Starship : AgentObject
 
         // MoveToPlayerAction leaf.
         TreeNode moveToPlayerNode = dt.AddNode(dt.CloseCombatNode, new MoveToPlayerAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)moveToPlayerNode).Agent = this.gameObject;
+        ((ActionNode)moveToPlayerNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add(moveToPlayerNode);
 
         // AttackAction leaf.
        TreeNode attackNode = dt.AddNode(dt.CloseCombatNode, new AttackAction(), TreeNodeType.RIGHT_TREE_NODE);
-        ((ActionNode)attackNode).Agent = this.gameObject;
+        ((ActionNode)attackNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add(attackNode);
     }
 }
