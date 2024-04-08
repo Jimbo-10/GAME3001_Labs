@@ -13,6 +13,8 @@ public class CloseCombatEnemy : AgentObject
     [SerializeField] float rotationSpeed;
     [SerializeField] float whiskerLength;
     [SerializeField] float whiskerAngle;
+    [SerializeField] float detectRange;
+
     // [SerializeField] float avoidanceWeight;
     private Rigidbody2D rb;
     private NavigationObject no;
@@ -35,6 +37,14 @@ public class CloseCombatEnemy : AgentObject
 
     void Update()
     {
+        Vector2 direction = (testTarget.position - transform.position).normalized;
+        float angleInRadians = Mathf.Atan2(direction.y, direction.x);
+        whiskerAngle = angleInRadians * Mathf.Rad2Deg;
+        bool hit = CastWhisker(whiskerAngle, Color.red);
+
+
+
+
         // bool hit = CastWhisker(whiskerAngle, Color.red);
         // transform.Rotate(0f, 0f, Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime);
 
@@ -45,10 +55,8 @@ public class CloseCombatEnemy : AgentObject
         //    AvoidObstacles();
         //}
 
-        // TODO: Add for Lab 7a. Add seek target for tree temporarily to planet.
-        dt.RadiusNode.IsWithinRadius = Vector3.Distance(transform.position, testTarget.position) <= 3f;
-
-        // TODO: Update for Lab 7a.
+        dt.RadiusNode.IsWithinRadius = Vector3.Distance(transform.position, testTarget.position) <= detectRange;
+        dt.LOSNode.HasLOS = hit;
         dt.MakeDecision();
 
         switch (state)
@@ -100,9 +108,9 @@ public class CloseCombatEnemy : AgentObject
         Color rayColor = color;
 
         // Calculate the direction of the whisker.
-        Vector2 whiskerDirection = Quaternion.Euler(0, 0, angle) * transform.right;
+        Vector2 whiskerDirection = Quaternion.Euler(0, 0, angle) * Vector2.right;
 
-        if (no.HasLOS(gameObject, "Planet", whiskerDirection, whiskerLength))
+        if (no.HasLOS(gameObject, "Player", whiskerDirection, whiskerLength))
         {
             // Debug.Log("Obstacle detected!");
             rayColor = Color.green;
@@ -174,7 +182,7 @@ public class CloseCombatEnemy : AgentObject
 
         // PatrolAction leaf.
         TreeNode patrolNode = dt.AddNode(dt.RadiusNode, new PatrolAction(), TreeNodeType.LEFT_TREE_NODE);
-        ((ActionNode)patrolNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy);
+        ((ActionNode)patrolNode).SetAgent(this.gameObject, typeof(CloseCombatEnemy));
         dt.treeNodeList.Add(patrolNode);
 
 
